@@ -88,7 +88,7 @@
 
 			alert("지역코드 :: " + regionvalue + ' / ' + "시작날짜 :: " +  dateFrom + ' / ' + "끝날짜 :: " + dateTo);
 			// 공공데이터 api
-			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubvalue='+regionvalue;
+			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubCode='+regionvalue;
 			console.log(url)
 			fetch(url)
 				.then(res => res.json())
