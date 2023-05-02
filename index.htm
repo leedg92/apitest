@@ -38,12 +38,24 @@
 	  </select>
 	  <br>
 	  <br>
+		민원 종류 : <select id="targetType"  style ="height:40px; width:100px;">
+		<option value="pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin" name="전체">전체</option>
+		<option value="pttn" name="일반민원">일반민원</option>
+		<option value="dfpt" name="고충민원">고충민원</option>
+		<option value="saeol" name="수집민원">수집민원</option>
+		<option value="prpl" name="제안">제안</option>
+		<option value="qna" name="정책Q&A">정책Q&A</option>
+		<option value="qna_origin" name="공개민원">공개민원</option>
+	  </select>
+	  <br>
+	  <br>
 	시작날짜 : <input type="text" id="dateFrom" placeholder="날짜(예:20230101)" style ="height:40px; width:200px;;">00시01분01초<br><Br>
 	끝날짜   : <input type="text" id="dateTo" placeholder="날짜(예:20231231)" style ="height:40px; width:200px;">23시59분59초<br><br>
+
 	<button onclick="callApi()">API 호출</button><br><br>
 
 	ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ결과ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	<p style="font-size:2em;">[<span id="regionName" ></span>] 민원건수 통계 정보</p>
+	<p style="font-size:2em;"><span id="regionName" ></span> (<span id="targetName"></span>) 민원건수 통계 정보</p>
 	<table id="table-container"></table>
 	ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ결과ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	<br>
@@ -66,8 +78,13 @@
 			var selectedValue = selectBox.options[selectBox.selectedIndex].text;
 			var regionName = selectedValue;
 
+			var selectBoxTarget = document.getElementById("targetType");
+			var selectedValueTarget = selectBoxTarget.options[selectBox.selectedIndex].text;
+			var TargetName = selectedValueTarget;
+
 
 			const regionvalue = selectBox.value;
+			const targetValue = selectBoxTarget.value;
 			const dateFrom = document.getElementById('dateFrom').value + '000101';
 			const dateTo = document.getElementById('dateTo').value + '235959';
 
@@ -88,7 +105,7 @@
 
 			alert("지역코드 :: " + regionvalue + ' / ' + "시작날짜 :: " +  dateFrom + ' / ' + "끝날짜 :: " + dateTo);
 			// 공공데이터 api
-			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubCode='+regionvalue;
+			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target='+targetValue+'&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubCode='+regionvalue;
 			console.log(url)
 			fetch(url)
 				.then(res => res.json())
@@ -100,6 +117,7 @@
 					tableContainer.appendChild(createTable(myJson));
 					document.getElementById('response').innerHTML = JSON.stringify(myJson);
 					document.getElementById('regionName').innerHTML = regionName;
+					document.getElementById('TargetName').innerHTML = TargeName;
 				})
 		}
     
