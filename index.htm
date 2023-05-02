@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+  table {
+    border-collapse: separate;
+    border-spacing: 10px;
+  }
+  td {
+    padding: 10px;
+  }
+</style>
   <meta charset="UTF-8">
   <title>공공데이터포탈</title>
 </head>
 <body>
-	<select id="region">
+	<span>※경상남도를 선택했을때는 정확하지 않은건지 데이터를 넣질 않은건지 모르겠지만, 하위 지역들 보다 더 적게 나옵니다.</span><Br>
+	지역 : <select id="region"  style ="height:40px; width:100px;">
 		<option value="6480000" name="경상남도">경상남도</option>
 		<option value="5360000" name="밀양시">밀양시</option>
 		<option value="5670000" name="창원시">창원시</option>
@@ -26,20 +36,38 @@
 		<option value="5420000" name="고성군">고성군</option>
 		<option value="5450000" name="산청군">산청군</option>
 	  </select>
-	  ※경상남도를 선택했을때는 정확하지 않은건지 데이터를 넣질 않은건지 모르겠지만, 하위 지역들 보다 더 적게 나옵니다.
 	  <br>
-	<input type="text" id="dateFrom" placeholder="날짜(예:20230101)">00시01분01초<br>
-	<input type="text" id="dateTo" placeholder="날짜(예:20231231)">23시59분59초<br>
-	<button onclick="callApi()">API 호출</button>
-	<p id="response"></p>
+	  <br>
+	시작날짜 : <input type="text" id="dateFrom" placeholder="날짜(예:20230101)" style ="height:40px; width:200px;;">00시01분01초<br><Br>
+	끝날짜   : <input type="text" id="dateTo" placeholder="날짜(예:20231231)" style ="height:40px; width:200px;">23시59분59초<br><br>
+	<button onclick="callApi()">API 호출</button><br><br>
+
+	ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ결과ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	<p style="font-size:2em;">[<span id="regionName" ></span>] 민원건수 통계 정보</p>
+	<table id="table-container"></table>
+	ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ결과ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	<br>
+	<p id="response"></p><a href="https://products.aspose.app/cells/ko/conversion/json-to-xlsx">https://products.aspose.app/cells/ko/conversion/json-to-xlsx</a>에서 위 형태를 excel형식으로 바꿀 수 있습니다.<br>
 
 	
 	<script src="app.js"></script>
 	<script>
     function callApi() {
-			alert("start")
+			// regionName 요소 초기화
+			var regionName = document.getElementById("regionName");
+			regionName.innerHTML = "";
 			
-			const regionvalue = document.getElementById('region').value;
+			// table 요소 초기화
+			var table = document.getElementById("table-container");
+			table.innerHTML = "";
+
+			alert("start")
+			var selectBox = document.getElementById("region");
+			var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+			var regionName = selectedValue;
+
+
+			const regionvalue = selectBox.value;
 			const dateFrom = document.getElementById('dateFrom').value + '000101';
 			const dateTo = document.getElementById('dateTo').value + '235959';
 
@@ -58,21 +86,55 @@
 				alert("시작날짜 또는 끝날짜는 8자리로 입력해야됩니다.");
 			}
 
-			
-
 			alert("지역코드 :: " + regionvalue + ' / ' + "시작날짜 :: " +  dateFrom + ' / ' + "끝날짜 :: " + dateTo);
 			// 공공데이터 api
 			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubvalue='+regionvalue;
-
+			console.log(url)
 			fetch(url)
 				.then(res => res.json())
 				.then(myJson => {
 					alert("end")
 					console.log(myJson);
+					
+					const tableContainer = document.getElementById('table-container');
+					tableContainer.appendChild(createTable(myJson));
 					document.getElementById('response').innerHTML = JSON.stringify(myJson);
+					document.getElementById('regionName').innerHTML = regionName;
 				})
 		}
     
+		function createTable(data) {
+			// HTML 테이블 요소 생성
+			const table = document.createElement('table');
+		  
+			// 헤더 행 생성
+			const headerRow = document.createElement('tr');
+			const headerCell1 = document.createElement('th');
+			headerCell1.textContent = '월';
+			const headerCell2 = document.createElement('th');
+			headerCell2.textContent = '건 수';
+			headerRow.appendChild(headerCell1);
+			headerRow.appendChild(headerCell2);
+			table.appendChild(headerRow);
+		  
+			// 데이터 행 생성
+			for (let i = 0; i < data.length; i++) {
+			  const cell1 = document.createElement('td');
+			  const month = data[i].label.slice(4, 6); // 뒤 2자리 추출
+			  cell1.textContent = `${month}월`;				
+			  const row = document.createElement('tr');
+			  const cell2 = document.createElement('td');
+			  cell2.textContent = data[i].hits;
+
+			  row.appendChild(cell1);
+			  row.appendChild(cell2);
+			  table.appendChild(row);
+			}
+		  
+			// 생성된 HTML 테이블 반환
+			return table;
+		  }
+
   </script>
 </body>
 </html>
