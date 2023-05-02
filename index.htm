@@ -2,28 +2,45 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>API 호출 예시</title>
+  <title>공공데이터포탈</title>
 </head>
 <body>
-  <h1>API 호출</h1>
-  <form id="myForm">
-    <label for="input1">파라미터 1:</label>
-    <input type="text" id="input1" name="param1"><br><br>
+	<select id="region">
+		<option code="6480000" value="경상남도">경상남도</option>
+		<option code="5360000" value="밀양시">밀양시</option>
+		<option code="5670000" value="창원시">창원시</option>
+		<option code="5410000" value="창녕군">창녕군</option>
+		<option code="5370000" value="거제시">거제시</option>
+		<option code="5330000" value="통영시">통영시</option>
+		<option code="5350000" value="김해시">김해시</option>
+		<option code="5380000" value="양산시">양산시</option>
+		<option code="5400000" value="함안군">함안군</option>
+		<option code="5460000" value="함양군">함양군</option>
+		<option code="5440000" value="하동군">하동군</option>
+		<option code="5310000" value="진주시">진주시</option>
+		<option code="5340000" value="사천시">사천시</option>
+		<option code="5430000" value="남해군">남해군</option>
+		<option code="5470000" value="거창군">거창군</option>
+		<option code="5480000" value="합천군">합천군</option>
+		<option code="5390000" value="의령군">의령군</option>
+		<option code="5420000" value="고성군">고성군</option>
+		<option code="5450000" value="산청군">산청군</option>
+	  </select>
+	<input type="text" id="dateFrom" class="flatpickr">
+	<input type="text" id="dataTo" class="flatpickr">
+	<button onclick="getAPI()">API 호출</button>
+	<p id="response"></p>
 
-    <label for="input2">파라미터 2:</label>
-    <input type="text" id="input2" name="param2"><br><br>
-
-    <button type="button" onclick="callApi()">API 호출</button>
-  </form>
-
-  <h1>API 호출 결과</h1>
-  <div id="result"></div>
-
-  <script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js" integrity="sha512-rdDpUud7/Gn1+xZ34rn7JkRp5+g9X9dGLvH5PQoB70+AvY1AdzRMHxPxLKQ2js8Fhzg/P9k9wu/fy18tWl0tGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="app.js"></script>
+	<script>
     function callApi() {
 			alert("start")
+			const regionCode = document.getElementById('region').value;
+			const dateFrom = document.getElementById('dateFrom').value;
+			const dataTo = document.getElementById('dataTo').value;
 			// 공공데이터 api
-			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=false&target=pttn&dateFrom=20220101000000&dateTo=2022123159590000';
+			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dataFrom+'&dateTo='+dateTo+'&mainSubCode='+regionCode;
 
 			fetch(url)
 				.then(res => res.json())
