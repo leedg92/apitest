@@ -21,18 +21,18 @@
 
   <script>
     function callApi() {
-
-		function callApi() {
+			alert("start")
 			// 공공데이터 api
 			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=false&target=pttn&dateFrom=20220101000000&dateTo=2022123159590000';
 
 			fetch(url)
 				.then(res => res.json())
 				.then(myJson => {
+					alert("end")
 					console.log(myJson);
 				})
 		}
-    }
+    
   </script>
 </body>
 </html>
