@@ -26,27 +26,50 @@
 		<option value="5420000" name="고성군">고성군</option>
 		<option value="5450000" name="산청군">산청군</option>
 	  </select>
-	<input type="text" id="dateFrom" class="flatpickr">
-	<input type="text" id="dataTo" class="flatpickr">
-	<button onclick="getAPI()">API 호출</button>
+	  ※경상남도를 선택했을때는 정확하지 않은건지 데이터를 넣질 않은건지 모르겠지만, 하위 지역들 보다 더 적게 나옵니다.
+	  <br>
+	<input type="text" id="dateFrom" placeholder="날짜(예:20230101)">00시01분01초<br>
+	<input type="text" id="dateTo" placeholder="날짜(예:20231231)">23시59분59초<br>
+	<button onclick="callApi()">API 호출</button>
 	<p id="response"></p>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js" integrity="sha512-rdDpUud7/Gn1+xZ34rn7JkRp5+g9X9dGLvH5PQoB70+AvY1AdzRMHxPxLKQ2js8Fhzg/P9k9wu/fy18tWl0tGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
 	<script src="app.js"></script>
 	<script>
     function callApi() {
 			alert("start")
+			
 			const regionvalue = document.getElementById('region').value;
-			const dateFrom = document.getElementById('dateFrom').value;
-			const dataTo = document.getElementById('dataTo').value;
+			const dateFrom = document.getElementById('dateFrom').value + '000101';
+			const dateTo = document.getElementById('dateTo').value + '235959';
+
+			if(document.getElementById('dateFrom').value == '' || document.getElementById('dateFrom').value == undefined){
+				alert("시작날짜를 입력해주세요.")
+				return false;
+			}
+			if(document.getElementById('dateTo').value == '' || document.getElementById('dateTo').value == undefined){
+				alert("끝날짜를 입력해주세요.")
+				return false;
+			}
+			if((dateTo - dateFrom) < 0){
+				alert("시작날짜가 끝날짜보다 클 수 없습니다.");
+			}
+			if(dateFrom.length != 14 || dateTo.length != 14){
+				alert("시작날짜 또는 끝날짜는 8자리로 입력해야됩니다.");
+			}
+
+			
+
+			alert("지역코드 :: " + regionvalue + ' / ' + "시작날짜 :: " +  dateFrom + ' / ' + "끝날짜 :: " + dateTo);
 			// 공공데이터 api
-			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dataFrom+'&dateTo='+dateTo+'&mainSubvalue='+regionvalue;
+			const url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=true&target=pttn%2Cdfpt%2Csaeol%2Cprpl%2Cqna%2Cqna_origin&dateFrom='+dateFrom+'&dateTo='+dateTo+'&mainSubvalue='+regionvalue;
 
 			fetch(url)
 				.then(res => res.json())
 				.then(myJson => {
 					alert("end")
 					console.log(myJson);
+					document.getElementById('response').innerHTML = myJson;
 				})
 		}
     
