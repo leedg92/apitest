@@ -21,25 +21,17 @@
 
   <script>
     function callApi() {
-      const form = document.querySelector('#myForm');
-      const params = new URLSearchParams(new FormData(form));
-
-      fetch(`https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=false&target=pttn&dateFrom=20220101000000&dateTo=2022123159590000`, {
-        method: 'GET', // HTTP 요청 방식 설정
-        headers: {
-          'Content-Type': 'application/json' // 요청 헤더 설정
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          // 서버 응답 결과 처리
-          const resultDiv = document.querySelector('#result');
-          resultDiv.innerHTML = JSON.stringify(data);
-        })
-        .catch(error => {
-          // 에러 처리
-          console.error(error);
-        });
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=false&target=pttn&dateFrom=20220101000000&dateTo=2022123159590000');
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		xhr.onreadystatechange = function() {
+		  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+			const data = JSON.parse(xhr.responseText);
+			// 서버 응답 결과 처리
+			console.log(data);
+		  }
+		}
+		xhr.send();
     }
   </script>
 </body>
