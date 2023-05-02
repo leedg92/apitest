@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,10 +49,10 @@
   <script>
     function callApi() {
 //api authURL : URL을 상수로 선언. 보통은 properies에 선언하여 사용함
-let apiURL = 'http://apis.data.go.kr/4050000/nrsry/getNrsry';
+let apiURL = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5';
 
 //api authKey : 인증키를 상수로 선언. 보통은 properies에 선언하여 사용함
-let apiKey = 'kKpMWs%2BB7PNqZUGhNY6Wv1Tfvrckn9d3DoT0vWO0EjY5xN06%2BP53Po%2FaGkNo193gHjU8SuGkE2%2Fu65phwcW6NA%3D%3D';
+let apiKey = '%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D';
 
 $(document).ready(function(){      
 	var api = new Vue ({
@@ -74,8 +75,7 @@ $(document).ready(function(){
 				/*
 				 * url를 선언함. 여기서는 그냥 대충 짰지만, 실제 사용할 때는 URL작성이 조금 더 동적이면서 유연하게 작성 할 필요가 있음
 				 * */
-				var url = 'https://cors-anywhere.herokuapp.com/'+ apiURL + '?serviceKey=' +apiKey + '&pageNo=' + this.pageNo + '&numOfRows=' + this.numOfRows
-				+ '&nrsry_type=' + this.nrsryType;
+				var url = 'https://apis.data.go.kr/1140100/minAnalsInfoView5/minStaticsInfo5?serviceKey=%2BFt24AieBZS226pLyjL27AFUlgQNvW5fiuAZAGXldP%2FsyRgKEe3ose2K%2FPbQ1kaOuxGg3HQkAHtCTeZjIA06UA%3D%3D&period=MONTHLY&sortBy=NAME&sortOrder=false&target=pttn&dateFrom=20220101000000&dateTo=2022123159590000';
 				axios.get(url,'',config).then(function(reult) { // url호출 -> 공공데이터포털로 데이터 요청을 보낸다. (request)
 					self.apiList = result.data.items; // 서버통신 성공시 apiList 배열에 해당 값을 담음 ( response )
 				})
