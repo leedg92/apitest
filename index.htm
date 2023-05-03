@@ -80,7 +80,7 @@
 
 			var selectBoxTarget = document.getElementById("targetType");
 			var selectedValueTarget = selectBoxTarget.options[selectBox.selectedIndex].text;
-			var TargetName = selectedValueTarget;
+			var targetName = selectedValueTarget;
 
 
 			const regionvalue = selectBox.value;
@@ -117,7 +117,7 @@
 					tableContainer.appendChild(createTable(myJson));
 					document.getElementById('response').innerHTML = JSON.stringify(myJson);
 					document.getElementById('regionName').innerHTML = regionName;
-					document.getElementById('TargetName').innerHTML = TargetName;
+					document.getElementById('targetName').innerHTML = targetName;
 				})
 		}
     
